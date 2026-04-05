@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
@@ -16,7 +17,7 @@ const userSelect = {
   status: true,
   createdAt: true,
   updatedAt: true,
-} as const;
+} satisfies Prisma.UserSelect;
 
 @Injectable()
 export class UsersService {
@@ -77,14 +78,13 @@ export class UsersService {
   async update(id: string, dto: UpdateUserDto) {
     await this.findOne(id);
 
-    const data: Record<string, unknown> = { ...dto };
-    if (dto.password) {
-      data.password = await bcrypt.hash(dto.password, 10);
-    }
+    const password: string | undefined = dto.password
+      ? await bcrypt.hash(dto.password, 10)
+      : undefined;
 
     return this.prisma.db.user.update({
       where: { id },
-      data,
+      data: { ...dto, password },
       select: userSelect,
     });
   }
