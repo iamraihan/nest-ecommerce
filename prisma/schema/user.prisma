@@ -1,0 +1,36 @@
+enum Role {
+    ADMIN
+    CUSTOMER
+}
+
+enum UserStatus {
+    ACTIVE
+    BLOCKED
+    DELETED
+}
+
+model User {
+    id String @id @default(uuid())
+
+    // Identity
+    firstName String @map("first_name")
+    lastName  String @map("last_name")
+    email     String @unique
+    password  String
+
+    // Contact & Verification
+    phone         String?
+    phoneVerified Boolean @default(false) @map("phone_verified")
+    emailVerified Boolean @default(false) @map("email_verified")
+
+    // Authorization
+    role   Role       @default(CUSTOMER)
+    status UserStatus @default(ACTIVE)
+
+    // Timestamps
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+
+    @@index([email, status])
+    @@map("users")
+}
