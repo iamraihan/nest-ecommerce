@@ -10,7 +10,9 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { softDeleteExtension } from './prisma.extension';
 
 function extendedPrismaClient(configService: ConfigService) {
-  const adapter = new PrismaPg(configService.get<string>('database.url')!);
+  const adapter = new PrismaPg(
+    configService.getOrThrow<string>('database.url'),
+  );
   return new PrismaClient({ adapter }).$extends(softDeleteExtension);
 }
 

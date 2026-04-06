@@ -1,1 +1,8 @@
-onlyBuiltDependencies: '["@prisma/engines","prisma","@nestjs/core","bcrypt"]'
+packages:
+  - .
+
+onlyBuiltDependencies:
+  - "@prisma/engines"
+  - "prisma"
+  - "@nestjs/core"
+  - "bcrypt"

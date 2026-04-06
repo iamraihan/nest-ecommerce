@@ -1,49 +1,50 @@
 import { plainToInstance } from 'class-transformer';
 import {
-  // IsEnum,
-  // IsNotEmpty,
+  IsEnum,
+  IsNotEmpty,
   IsNumber,
   IsOptional,
-  // IsString,
+  IsString,
   validateSync,
 } from 'class-validator';
 
-// enum NodeEnvironment {
-//   Development = 'development',
-//   Production = 'production',
-//   Test = 'test',
-// }
+enum NodeEnvironment {
+  Development = 'development',
+  Production = 'production',
+  Test = 'test',
+}
 
 class EnvironmentVariables {
   @IsNumber()
   @IsOptional()
   PORT: number = 8000;
 
-  // @IsEnum(NodeEnvironment)
-  // NODE_ENV: NodeEnvironment;
+  @IsEnum(NodeEnvironment)
+  @IsOptional()
+  NODE_ENV: NodeEnvironment = NodeEnvironment.Development;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // DATABASE_URL: string;
+  @IsString()
+  @IsNotEmpty()
+  DATABASE_URL!: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // POSTGRES_HOST: string;
+  @IsString()
+  @IsNotEmpty()
+  POSTGRES_HOST!: string;
 
-  // @IsNumber()
-  // POSTGRES_PORT: number;
+  @IsNumber()
+  POSTGRES_PORT!: number;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // POSTGRES_USER: string;
+  @IsString()
+  @IsNotEmpty()
+  POSTGRES_USER!: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // POSTGRES_PASSWORD: string;
+  @IsString()
+  @IsNotEmpty()
+  POSTGRES_PASSWORD!: string;
 
-  // @IsString()
-  // @IsNotEmpty()
-  // POSTGRES_DB: string;
+  @IsString()
+  @IsNotEmpty()
+  POSTGRES_DB!: string;
 }
 
 export function validate(config: Record<string, unknown>) {
