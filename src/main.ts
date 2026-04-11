@@ -5,7 +5,7 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { PrismaExceptionFilter } from './common/filters/prisma-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
-import { setupSwagger } from './config';
+import { API_PREFIX, API_VERSION, setupSwagger } from './config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,10 +13,10 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('app.port', 8000);
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix(API_PREFIX);
   app.enableVersioning({
     type: VersioningType.URI,
-    defaultVersion: '1',
+    defaultVersion: API_VERSION,
   });
   app.enableCors();
   app.enableShutdownHooks();

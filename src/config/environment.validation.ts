@@ -1,5 +1,6 @@
 import { plainToInstance } from 'class-transformer';
 import {
+  IsBoolean,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -22,6 +23,10 @@ class EnvironmentVariables {
   @IsEnum(NodeEnvironment)
   @IsOptional()
   NODE_ENV: NodeEnvironment = NodeEnvironment.Development;
+
+  @IsBoolean()
+  @IsOptional()
+  SWAGGER_ENABLED?: boolean;
 
   @IsString()
   @IsNotEmpty()

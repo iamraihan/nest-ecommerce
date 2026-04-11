@@ -43,7 +43,7 @@ export class HealthResponseEnvelopeDto {
 
   @ApiProperty({
     description: 'Simple application status message.',
-    example: 'Hello World!',
+    example: 'API is healthy and running!',
   })
   data!: string;
 
