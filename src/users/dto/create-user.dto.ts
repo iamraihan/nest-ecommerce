@@ -28,6 +28,10 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString()
+  avatarKey?: string;
+
+  @IsOptional()
+  @IsString()
   @Matches(/^\+[1-9]\d{1,14}$/, { message: 'Phone must be in E.164 format' })
   phone?: string;
 

@@ -11,6 +11,7 @@ CREATE TABLE "users" (
     "last_name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "avatar_key" TEXT,
     "phone" TEXT,
     "phone_verified" BOOLEAN NOT NULL DEFAULT false,
     "email_verified" BOOLEAN NOT NULL DEFAULT false,
