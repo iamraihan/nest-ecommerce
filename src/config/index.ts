@@ -1,3 +1,4 @@
 export { default as appConfig } from './app.config';
 export { default as databaseConfig } from './database.config';
 export { validate } from './environment.validation';
+export { default as setupSwagger } from './swagger.config';
