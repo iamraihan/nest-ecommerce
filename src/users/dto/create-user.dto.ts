@@ -1,8 +1,11 @@
-import { Role } from '@prisma/client';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import {
+  ApiHideProperty,
+  ApiProperty,
+  ApiPropertyOptional,
+} from '@nestjs/swagger';
 import {
   IsEmail,
-  IsEnum,
+  IsEmpty,
   IsOptional,
   IsString,
   Matches,
@@ -62,13 +65,10 @@ export class CreateUserDto {
   @Matches(/^\+[1-9]\d{1,14}$/, { message: 'Phone must be in E.164 format' })
   phone?: string;
 
-  @ApiPropertyOptional({
-    description: 'Role assigned to the user.',
-    enum: Role,
-    default: Role.CUSTOMER,
-    example: Role.CUSTOMER,
+  @ApiHideProperty()
+  @IsEmpty({
+    message:
+      'Role cannot be assigned from this route. This endpoint only creates CUSTOMER accounts.',
   })
-  @IsOptional()
-  @IsEnum(Role)
-  role?: Role;
+  role?: never;
 }
