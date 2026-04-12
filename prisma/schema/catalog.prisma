@@ -1,4 +1,4 @@
-// Catalogue domain schema
+// Catalog domain schema
 // Main tables: products, product_options, product_option_values,
 // product_variants, product_images
 // Junction table: product_variant_option_values

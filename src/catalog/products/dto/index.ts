@@ -1,1 +1,5 @@
-export * from './create-product.dto';
+export {
+  CreateProductDto,
+  ProductStatus,
+  ProductType,
+} from './create-product.dto';
