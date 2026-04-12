@@ -357,7 +357,7 @@ export class CreateProductDto {
     example: '9d6d4f05-a6d8-4af5-b0cc-9f4e91346659',
   })
   @IsOptional()
-  @IsUUID()
+  @IsUUID('4')
   brandId?: string;
 
   @ApiProperty({
