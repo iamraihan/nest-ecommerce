@@ -23,7 +23,7 @@ model Product {
   slug             String        @unique @db.VarChar(180)
   shortDescription String?       @map("short_description") @db.VarChar(320)
   description      String?
-  brand            String?       @db.VarChar(120)
+  brandId          String?       @map("brand_id")
   status           ProductStatus @default(DRAFT)
   productType      ProductType   @default(PHYSICAL) @map("product_type")
 
@@ -52,9 +52,11 @@ model Product {
   publishedAt DateTime? @map("published_at")
 
   // Relations
-  options  ProductOption[]
-  variants ProductVariant[]
-  images   ProductImage[]
+  brand             Brand?            @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  categories        ProductCategory[]
+  options           ProductOption[]
+  variants          ProductVariant[]
+  images            ProductImage[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -62,10 +64,68 @@ model Product {
 
   @@index([status, publishedAt])
   @@index([productType, status])
-  @@index([brand])
+  @@index([brandId])
   @@index([createdBy])
   @@index([updatedBy])
   @@map("products")
+}
+
+model Brand {
+  id String @id @default(uuid())
+
+  name        String  @unique @db.VarChar(120)
+  slug        String  @unique @db.VarChar(140)
+  description String?
+  logoUrl     String? @map("logo_url") @db.VarChar(2048)
+  isActive    Boolean @default(true) @map("is_active")
+
+  products Product[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([isActive])
+  @@map("brands")
+}
+
+model Category {
+  id String @id @default(uuid())
+
+  name        String  @db.VarChar(120)
+  slug        String  @unique @db.VarChar(140)
+  description String?
+  parentId    String? @map("parent_id")
+  isActive    Boolean @default(true) @map("is_active")
+  position    Int     @default(0)
+
+  parent   Category?         @relation("CategoryHierarchy", fields: [parentId], references: [id], onDelete: SetNull)
+  children Category[]        @relation("CategoryHierarchy")
+  products ProductCategory[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@unique([parentId, name])
+  @@index([parentId, position])
+  @@index([isActive])
+  @@map("categories")
+}
+
+model ProductCategory {
+  id String @id @default(uuid())
+
+  productId  String @map("product_id")
+  categoryId String @map("category_id")
+
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([productId, categoryId])
+  @@index([productId])
+  @@index([categoryId])
+  @@map("product_categories")
 }
 
 model ProductOption {

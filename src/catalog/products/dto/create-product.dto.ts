@@ -18,6 +18,7 @@ import {
   IsObject,
   IsOptional,
   IsString,
+  IsUUID,
   IsUrl,
   Matches,
   MaxLength,
@@ -352,13 +353,22 @@ export class CreateProductDto {
   description?: string;
 
   @ApiPropertyOptional({
-    description: 'Brand or manufacturer name.',
-    example: 'North Loom',
+    description: 'Brand identifier from the catalog brand master.',
+    example: '9d6d4f05-a6d8-4af5-b0cc-9f4e91346659',
   })
   @IsOptional()
-  @IsString()
-  @MaxLength(120)
-  brand?: string;
+  @IsUUID('4')
+  brandId?: string;
+
+  @ApiProperty({
+    description: 'At least one category identifier the product belongs to.',
+    example: ['99f8af39-e3bf-4957-8327-2a96ed4268f7'],
+  })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayUnique()
+  @IsUUID('4', { each: true })
+  categoryIds!: string[];
 
   @ApiPropertyOptional({
     description: 'Catalog workflow status.',

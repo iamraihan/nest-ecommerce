@@ -11,7 +11,7 @@ CREATE TABLE "products" (
     "slug" VARCHAR(180) NOT NULL,
     "short_description" VARCHAR(320),
     "description" TEXT,
-    "brand" VARCHAR(120),
+    "brand_id" TEXT,
     "status" "ProductStatus" NOT NULL DEFAULT 'DRAFT',
     "product_type" "ProductType" NOT NULL DEFAULT 'PHYSICAL',
     "currency_code" CHAR(3) NOT NULL DEFAULT 'USD',
@@ -31,6 +31,35 @@ CREATE TABLE "products" (
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "products_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "brands" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(120) NOT NULL,
+    "slug" VARCHAR(140) NOT NULL,
+    "description" TEXT,
+    "logo_url" VARCHAR(2048),
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "brands_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "categories" (
+    "id" TEXT NOT NULL,
+    "name" VARCHAR(120) NOT NULL,
+    "slug" VARCHAR(140) NOT NULL,
+    "description" TEXT,
+    "parent_id" TEXT,
+    "is_active" BOOLEAN NOT NULL DEFAULT true,
+    "position" INTEGER NOT NULL DEFAULT 0,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "categories_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -55,6 +84,16 @@ CREATE TABLE "product_option_values" (
     "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "product_option_values_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "product_categories" (
+    "id" TEXT NOT NULL,
+    "product_id" TEXT NOT NULL,
+    "category_id" TEXT NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "product_categories_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -120,13 +159,34 @@ CREATE INDEX "products_status_published_at_idx" ON "products"("status", "publish
 CREATE INDEX "products_product_type_status_idx" ON "products"("product_type", "status");
 
 -- CreateIndex
-CREATE INDEX "products_brand_idx" ON "products"("brand");
+CREATE INDEX "products_brand_id_idx" ON "products"("brand_id");
 
 -- CreateIndex
 CREATE INDEX "products_created_by_idx" ON "products"("created_by");
 
 -- CreateIndex
 CREATE INDEX "products_updated_by_idx" ON "products"("updated_by");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "brands_name_key" ON "brands"("name");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "brands_slug_key" ON "brands"("slug");
+
+-- CreateIndex
+CREATE INDEX "brands_is_active_idx" ON "brands"("is_active");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "categories_slug_key" ON "categories"("slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "categories_parent_id_name_key" ON "categories"("parent_id", "name");
+
+-- CreateIndex
+CREATE INDEX "categories_parent_id_position_idx" ON "categories"("parent_id", "position");
+
+-- CreateIndex
+CREATE INDEX "categories_is_active_idx" ON "categories"("is_active");
 
 -- CreateIndex
 CREATE INDEX "product_options_product_id_idx" ON "product_options"("product_id");
@@ -136,6 +196,15 @@ CREATE UNIQUE INDEX "product_options_product_id_name_key" ON "product_options"("
 
 -- CreateIndex
 CREATE UNIQUE INDEX "product_options_product_id_position_key" ON "product_options"("product_id", "position");
+
+-- CreateIndex
+CREATE INDEX "product_categories_product_id_idx" ON "product_categories"("product_id");
+
+-- CreateIndex
+CREATE INDEX "product_categories_category_id_idx" ON "product_categories"("category_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "product_categories_product_id_category_id_key" ON "product_categories"("product_id", "category_id");
 
 -- CreateIndex
 CREATE INDEX "product_option_values_option_id_idx" ON "product_option_values"("option_id");
@@ -180,7 +249,19 @@ CREATE INDEX "product_images_product_id_sort_order_idx" ON "product_images"("pro
 CREATE INDEX "product_images_variant_id_idx" ON "product_images"("variant_id");
 
 -- AddForeignKey
+ALTER TABLE "products" ADD CONSTRAINT "products_brand_id_fkey" FOREIGN KEY ("brand_id") REFERENCES "brands"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "categories" ADD CONSTRAINT "categories_parent_id_fkey" FOREIGN KEY ("parent_id") REFERENCES "categories"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "product_options" ADD CONSTRAINT "product_options_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "product_categories" ADD CONSTRAINT "product_categories_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "products"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "product_categories" ADD CONSTRAINT "product_categories_category_id_fkey" FOREIGN KEY ("category_id") REFERENCES "categories"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "product_option_values" ADD CONSTRAINT "product_option_values_option_id_fkey" FOREIGN KEY ("option_id") REFERENCES "product_options"("id") ON DELETE CASCADE ON UPDATE CASCADE;
