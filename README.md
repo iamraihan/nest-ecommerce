@@ -7,7 +7,7 @@ A NestJS-based ecommerce REST API with Prisma ORM, PostgreSQL, and Docker.
 - **Runtime:** Node.js
 - **Framework:** NestJS 11
 - **ORM:** Prisma 7 (with PostgreSQL adapter)
-- **Database:** PostgreSQL 16
+- **Database:** PostgreSQL 16.
 - **Package Manager:** pnpm
 - **Containerization:** Docker Compose (Postgres + pgAdmin).
 
