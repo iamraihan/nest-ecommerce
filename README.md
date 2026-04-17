@@ -15,7 +15,7 @@ A NestJS-based ecommerce REST API with Prisma ORM, PostgreSQL, and Docker.
 
 - Node.js (v20+)
 - pnpm
-- Docker & Docker Compose
+- Docker & Docker Compose.
 
 ## Getting Started
 
