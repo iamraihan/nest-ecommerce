@@ -52,11 +52,11 @@ model Product {
   publishedAt DateTime? @map("published_at")
 
   // Relations
-  brand             Brand?            @relation(fields: [brandId], references: [id], onDelete: SetNull)
-  categories        ProductCategory[]
-  options           ProductOption[]
-  variants          ProductVariant[]
-  images            ProductImage[]
+  brand      Brand?            @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  categories ProductCategory[]
+  options    ProductOption[]
+  variants   ProductVariant[]
+  images     ProductImage[]
 
   // Timestamps
   createdAt DateTime @default(now()) @map("created_at")
@@ -70,6 +70,7 @@ model Product {
   @@map("products")
 }
 
+// Note: Brands are optional and can be used for filtering and merchandising, but products can exist without a brand association.
 model Brand {
   id String @id @default(uuid())
 
@@ -87,6 +88,7 @@ model Brand {
   @@index([isActive])
   @@map("brands")
 }
+
 
 model Category {
   id String @id @default(uuid())
