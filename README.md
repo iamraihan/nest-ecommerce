@@ -19,48 +19,105 @@ A NestJS-based ecommerce REST API with Prisma ORM, PostgreSQL, and Docker.
 
 ## Getting Started
 
-### 1. Clone & Install
+Follow these steps in order. Each step depends on the previous one.
+
+### 1. Clone the repository
 
 ```bash
 git clone <repo-url>
 cd nest-ecommerce
+```
+
+### 2. Install dependencies
+
+```bash
 pnpm install
 ```
 
-### 2. Environment Setup
+If you don't have pnpm installed, run `npm install -g pnpm` first.
+
+### 3. Configure environment variables
+
+Copy the example file and edit the values:
 
 ```bash
 cp .env.example .env
-# Edit .env with your values
 ```
 
-### 3. Start Database
+Open `.env` and update the credentials. At minimum, change `POSTGRES_PASSWORD` and keep `DATABASE_URL` in sync with it:
+
+```env
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your-password-here
+POSTGRES_DB=nest_ecommerce
+DATABASE_URL="postgresql://postgres:your-password-here@localhost:5432/nest_ecommerce?schema=public"
+```
+
+### 4. Start the database with Docker
+
+Make sure Docker Desktop (or Docker daemon) is running, then:
 
 ```bash
 pnpm run db:up
 ```
 
-This starts PostgreSQL on port `5432` and pgAdmin on port `5050`.
+This boots two containers:
+- **PostgreSQL** on `localhost:5432`
+- **pgAdmin** on [http://localhost:5050](http://localhost:5050) (log in with `PGADMIN_DEFAULT_EMAIL` / `PGADMIN_DEFAULT_PASSWORD`)
 
-### 4. Run Migrations & Generate Client
+Verify the containers are healthy:
+
+```bash
+docker ps
+```
+
+### 5. Run database migrations
+
+This applies the Prisma schema to your fresh database and creates all tables:
 
 ```bash
 pnpm run db:migrate
+```
+
+### 6. Generate the Prisma client
+
+```bash
 pnpm run db:generate
 ```
 
-### 5. Start the App
+Re-run this any time `prisma/schema/*.prisma` changes.
+
+### 7. Start the application
 
 ```bash
-# Development (watch mode)
+# Development (hot-reload)
 pnpm run start:dev
+```
 
-# Production
+The API is now live at [http://localhost:8000/api/v1](http://localhost:8000/api/v1).
+
+### 8. (Optional) Production build
+
+```bash
 pnpm run build
 pnpm run start:prod
 ```
 
-The API will be available at `http://localhost:8000/api/v1`.
+### Stopping the app
+
+Stop the dev server with `Ctrl+C`, then shut down the database containers:
+
+```bash
+pnpm run db:down
+```
+
+Your data persists in a Docker volume and will still be there next time you run `pnpm run db:up`.
+
+### Troubleshooting
+
+- **Port `5432` already in use:** another Postgres is running locally. Stop it, or change `POSTGRES_PORT` in `.env` (and update `DATABASE_URL` to match).
+- **Prisma client errors after schema changes:** run `pnpm run db:generate`, then restart the dev server.
+- **Start over with a clean database:** `pnpm run db:reset` drops everything and re-runs migrations.
 
 ## Available Scripts
 
