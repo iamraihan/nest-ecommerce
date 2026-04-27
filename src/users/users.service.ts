@@ -11,6 +11,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto, UpdateUserDto } from './dto';
 import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 
+// Define a consistent user select object to avoid repetition and ensure only necessary fields are returned
 const userSelect = {
   id: true,
   firstName: true,
