@@ -1,6 +1,6 @@
 # Nest Ecommerce API
 
-A NestJS-based ecommerce REST API with Prisma ORM, PostgreSQL, and Docker.
+A NestJS-based ecommerce REST API with Prisma ORM, PostgreSQL, and Docker
 
 ## Tech Stack
 
