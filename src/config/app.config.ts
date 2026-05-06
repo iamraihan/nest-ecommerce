@@ -1,6 +1,7 @@
 import { API_PREFIX, API_VERSION, SWAGGER_DOCS_PATH } from './api.constants';
 import { registerAs } from '@nestjs/config';
 
+// default to development if NODE_ENV is not set
 const nodeEnv = process.env.NODE_ENV || 'development';
 
 export default registerAs('app', () => ({
