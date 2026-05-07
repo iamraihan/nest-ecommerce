@@ -27,6 +27,7 @@ export class PrismaService implements OnModuleInit, OnModuleDestroy {
     this.client = extendedPrismaClient(configService);
   }
 
+  // Expose the Prisma client for use in other services
   get db(): ExtendedPrismaClient {
     return this.client;
   }
