@@ -211,4 +211,4 @@ On app load:
 
 ### One-Sentence Summary
 
-JWT access tokens (15 min, with `jti`) for stateless verification, paired with rotating refresh tokens (7 days, in DB with `family_id` and reuse detection) sent via httpOnly cookies, with a Redis blocklist checked only on sensitive routes, and a nightly cleanup cron — aligned with OAuth 2.0 best practices.
+JWT access tokens (15 min, with `jti`) for stateless verification, paired with rotating refresh tokens (7 days, in DB with `family_id` and reuse detection) sent via httpOnly cookies, with a Redis blocklist checked only on sensitive routes, and a nightly cleanup cron — aligned with OAuth 2.0 best practices
