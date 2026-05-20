@@ -1,6 +1,6 @@
 # AUTH_PATTERN.md
 
-Save this file. Copy into every project.
+Save this file Copy into every project.
 
 ---
 
